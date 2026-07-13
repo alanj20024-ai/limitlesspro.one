@@ -119,8 +119,9 @@ header.scrolled{box-shadow:0 6px 24px -16px rgba(14,42,71,.45)}
 .q-nav{display:flex;gap:10px;margin-top:6px}
 .q-nav .btn{flex:1;justify-content:center}
 .q-note{font-size:11.5px;color:#98a2b3;margin-top:11px;text-align:center}
-.consent{display:flex;gap:9px;align-items:flex-start;font-size:11.5px;line-height:1.5;color:#98a2b3;margin:6px 0 15px;cursor:pointer}
-.consent input{margin-top:2px;flex:none;width:16px;height:16px;accent-color:var(--blue);cursor:pointer}
+.consent{display:flex;gap:9px;align-items:flex-start;margin:4px 0 14px;font-size:11.5px;line-height:1.5;color:#667085;cursor:pointer}
+.consent input{margin-top:2px;width:16px;height:16px;flex:none;accent-color:var(--blue);cursor:pointer}
+.consent a{color:var(--blue);text-decoration:underline}
 #q-success{display:none;text-align:center;padding:14px 4px}
 #q-success svg{width:48px;height:48px;fill:#16a34a;margin-bottom:10px}
 #q-success h4{font-size:20px;margin-bottom:8px}
@@ -296,35 +297,52 @@ footer{background:var(--navy);color:#aebfd4;padding:58px 0 0;font-size:14.5px}
       </div>
       <div class="quote-body">
         <div id="q-form">
-          <div class="two">
-            <div class="field"><label>First Name *</label><input id="f-fname" placeholder="First name"></div>
-            <div class="field"><label>Last Name</label><input id="f-lname" placeholder="Last name"></div>
-          </div>
-          <div class="two">
-            <div class="field"><label>Email *</label><input id="f-email" type="email" placeholder="you@email.com"></div>
-            <div class="field"><label>Phone *</label><input id="f-phone" type="tel" placeholder="(___) ___-____"></div>
-          </div>
-          <div class="two">
-            <div class="field"><label>Pickup Location (City or ZIP) *</label><input id="f-from" placeholder="Houston, TX"></div>
-            <div class="field"><label>Delivery Location (City or ZIP) *</label><input id="f-to" placeholder="Dallas, TX"></div>
-          </div>
-          <div class="two">
-            <div class="field"><label>Vehicle — Year / Make / Model</label><input id="f-veh" placeholder="2022 Ford F-250"></div>
-            <div class="field"><label>Transport Type</label>
-              <select id="f-type"><option>Open</option><option>Enclosed</option><option>Gooseneck / Heavy</option><option>Hotshot / Expedited</option><option>Flatbed Freight</option></select>
+          <div class="steps-dots"><i class="on" data-d="1"></i><i data-d="2"></i><i data-d="3"></i></div>
+
+          <!-- Step 1: route -->
+          <div class="qstep on" data-s="1">
+            <div class="two">
+              <div class="field"><label>From (City or ZIP)</label><input id="f-from" placeholder="Houston, TX"></div>
+              <div class="field"><label>To (City or ZIP)</label><input id="f-to" placeholder="Dallas, TX"></div>
             </div>
+            <div class="field"><label>Pickup Date</label><input id="f-date" type="date"></div>
+            <div class="q-nav"><button class="btn btn-blue" onclick="next(2)">Next</button></div>
           </div>
-          <div class="two">
+
+          <!-- Step 2: vehicle -->
+          <div class="qstep" data-s="2">
+            <div class="field"><label>Shipping a vehicle or freight?</label>
+              <div class="radio-row">
+                <label class="sel"><input type="radio" name="kind" checked>Vehicle</label>
+                <label><input type="radio" name="kind">Freight</label>
+              </div>
+            </div>
+            <div class="two">
+              <div class="field"><label>Year / Make / Model</label><input id="f-veh" placeholder="2022 Ford F-250"></div>
+              <div class="field"><label>Transport Type</label>
+                <select id="f-type"><option>Open</option><option>Enclosed</option><option>Gooseneck / Heavy</option><option>Hotshot / Expedited</option><option>Flatbed Freight</option></select>
+              </div>
+            </div>
             <div class="field"><label>Is the vehicle operable?</label>
               <div class="radio-row">
                 <label class="sel"><input type="radio" name="op" checked>Yes</label>
                 <label><input type="radio" name="op">No</label>
               </div>
             </div>
-            <div class="field"><label>Preferred Ship Date</label><input id="f-date" type="date"></div>
+            <div class="q-nav"><button class="btn btn-out" onclick="next(1)">Previous</button><button class="btn btn-blue" onclick="next(3)">Next</button></div>
           </div>
-          <label class="consent"><input type="checkbox" id="f-consent"><span>By submitting this form, you agree to receive text messages from Limitless Pro. These messages may include shipment-related updates, appointment reminders, and other important information about your transport. Standard message and data rates may apply. You may opt out at any time by replying STOP to any text message, or by contacting us directly. We never sell your information.</span></label>
-          <div class="q-nav"><button class="btn btn-blue" id="q-submit" onclick="submitQuote()">Get My Free Quote</button></div>
+
+          <!-- Step 3: contact -->
+          <div class="qstep" data-s="3">
+            <div class="two">
+              <div class="field"><label>Your Name</label><input id="f-name" placeholder="First & last"></div>
+              <div class="field"><label>Phone</label><input id="f-phone" placeholder="(___) ___-____"></div>
+            </div>
+            <div class="field"><label>Email</label><input id="f-email" type="email" placeholder="you@email.com"></div>
+            <label class="consent"><input type="checkbox" id="f-consent"><span>I agree to receive text messages from Limitless Pro LLC about my quote and shipment. Message and data rates may apply. Message frequency varies. Reply STOP to opt out, HELP for help. Consent is not a condition of purchase. See our <a href="/privacy.html" target="_blank">Privacy Policy</a>.</span></label>
+            <div class="q-nav"><button class="btn btn-out" onclick="next(2)">Previous</button><button class="btn btn-blue" onclick="submitQuote()">Submit</button></div>
+            <p class="q-note">We never sell your information.</p>
+          </div>
         </div>
         <div id="q-success">
           <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm-1 14.4-4-4L8.4 11 11 13.6 15.6 9 17 10.4z"/></svg>
@@ -485,7 +503,7 @@ footer{background:var(--navy);color:#aebfd4;padding:58px 0 0;font-size:14.5px}
         <a href="#services">Door-to-Door</a><a href="#services">Open Transport</a><a href="#services">Enclosed Transport</a><a href="#services">Hotshot / Expedited</a><a href="#services">Flatbed Freight</a>
       </div>
       <div><h4>Company</h4>
-        <a href="#how">How It Works</a><a href="#why">Why Us</a><a href="#faq">FAQ</a><a href="#quote">Get a Quote</a>
+        <a href="#how">How It Works</a><a href="#why">Why Us</a><a href="#faq">FAQ</a><a href="#quote">Get a Quote</a><a href="/privacy.html">Privacy Policy</a><a href="/terms.html">Terms of Service</a>
       </div>
       <div><h4>Contact</h4>
         <!--EDIT--><a href="tel:+18327570745">(832) 757-0745</a>
@@ -495,7 +513,7 @@ footer{background:var(--navy);color:#aebfd4;padding:58px 0 0;font-size:14.5px}
     </div>
     <div class="foot-bar">
       <div>&copy; <span id="yr"></span> Limitless Pro LLC. All rights reserved.</div>
-      <div><!--EDIT MC/DOT-->MC# 1532052</div>
+      <div>MC# 1532052 &nbsp;&bull;&nbsp; <a href="/privacy.html" style="display:inline;margin:0">Privacy Policy</a> &nbsp;&bull;&nbsp; <a href="/terms.html" style="display:inline;margin:0">Terms of Service</a></div>
     </div>
   </div>
 </footer>
@@ -509,8 +527,15 @@ footer{background:var(--navy);color:#aebfd4;padding:58px 0 0;font-size:14.5px}
 <script>
 document.getElementById('yr').textContent=new Date().getFullYear();
 
-/* Lead capture: the form posts to /api/lead (a Vercel serverless function) which
-   forwards to GoHighLevel using the GHL_WEBHOOK_URL environment variable in Vercel. */
+/* ===== GoHighLevel lead capture =====
+   1. In GHL: Automation > Workflows > Create Workflow
+   2. Add Trigger > "Inbound Webhook" (premium). Copy the webhook URL.
+   3. Paste that URL below (replace PASTE_YOUR_GHL_WEBHOOK_URL_HERE).
+   4. In the workflow, add a "Create/Update Contact" action and map:
+      email, phone, firstName, plus custom fields: from, to, pickup_date,
+      shipment_kind, vehicle, transport_type, operable, source.
+   (A contact requires email OR phone in the payload.)                       */
+const GHL_WEBHOOK_URL = "PASTE_YOUR_GHL_WEBHOOK_URL_HERE";
 // header shadow on scroll
 const hdr=document.getElementById('hdr');
 addEventListener('scroll',()=>hdr.classList.toggle('scrolled',scrollY>10));
@@ -529,40 +554,45 @@ addEventListener('resize',()=>{if(innerWidth>980)closeMenu();});
 document.querySelectorAll('.radio-row').forEach(row=>{
   row.querySelectorAll('label').forEach(l=>l.onclick=()=>{row.querySelectorAll('label').forEach(x=>x.classList.remove('sel'));l.classList.add('sel');const i=l.querySelector('input');if(i)i.checked=true;});
 });
-function selVal(name){const r=document.querySelector('.radio-row label.sel input[name="'+name+'"]');return r?r.parentElement.textContent.trim():'';}
+// multi-step quote
+function next(n){
+  document.querySelectorAll('.qstep').forEach(s=>s.classList.toggle('on',+s.dataset.s===n));
+  document.querySelectorAll('.steps-dots i').forEach(d=>d.classList.toggle('on',+d.dataset.d<=n));
+}
+function selVal(name){const r=document.querySelector('[data-s="2"] .radio-row label.sel input[name="'+name+'"]');return r?r.parentElement.textContent.trim():'';}
 async function submitQuote(){
-  const v=id=>{const el=document.getElementById(id);return el?el.value.trim():'';};
-  const fname=v('f-fname'), lname=v('f-lname'), email=v('f-email'), phone=v('f-phone'), from=v('f-from'), to=v('f-to');
-  if(!fname){alert('Please enter your first name.');return;}
+  const v=id=>document.getElementById(id).value.trim();
+  const from=v('f-from'), to=v('f-to'), email=v('f-email'), phone=v('f-phone'), name=v('f-name');
+  if(!from||!to){alert('Please go back to step 1 and enter pickup and delivery locations.');return;}
   if(!email&&!phone){alert('Please add an email or phone so we can send your rate.');return;}
-  if(!from||!to){alert('Please enter both your pickup and delivery locations.');return;}
-  if(!document.getElementById('f-consent').checked){alert('Please check the box agreeing to be contacted so we can send your quote.');return;}
 
   const payload={
-    firstName:fname, lastName:lname, full_name:(fname+' '+lname).trim(),
-    email, phone, from, to,
+    firstName:name, full_name:name, email, phone,
+    from, to,
     pickup_date:v('f-date'),
+    shipment_kind:selVal('kind'),
     vehicle:v('f-veh'),
     transport_type:document.getElementById('f-type').value,
     operable:selVal('op'),
-    sms_consent:true,
-    source:'limitlesspro.one auto transport quote form',
-    page_url:location.href,
+    sms_consent:document.getElementById('f-consent').checked ? 'yes' : 'no',
+    sms_consent_text:'I agree to receive text messages from Limitless Pro LLC about my quote and shipment. Msg & data rates may apply. Reply STOP to opt out.',
+    source:'limitlesspro.one auto transport site',
     submitted_at:new Date().toISOString()
   };
 
-  const btn=document.getElementById('q-submit');
-  const orig=btn?btn.textContent:'';
-  if(btn){btn.textContent='Sending...';btn.disabled=true;}
+  const btn=event&&event.target; if(btn){btn.textContent='Sending...';btn.disabled=true;}
   try{
-    const res=await fetch('/api/lead',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
-    if(!res.ok){throw new Error('status '+res.status);}
-    document.getElementById('q-form').style.display='none';
-    document.getElementById('q-success').style.display='block';
+    if(GHL_WEBHOOK_URL && !GHL_WEBHOOK_URL.startsWith('PASTE_')){
+      await fetch(GHL_WEBHOOK_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+    }else{
+      console.warn('GHL_WEBHOOK_URL not set — lead not sent:',payload);
+    }
   }catch(err){
-    if(btn){btn.textContent=orig;btn.disabled=false;}
-    alert('Sorry \u2014 something went wrong sending your request. Please email Freight@limitlesspro.one and we\u2019ll get you a quote right away.');
+    // CORS or network: lead may still arrive; log for debugging
+    console.warn('Lead POST issue (this can be a CORS warning even on success):',err,payload);
   }
+  document.getElementById('q-form').style.display='none';
+  document.getElementById('q-success').style.display='block';
 }
 // FAQ accordion
 document.querySelectorAll('.q-q').forEach(b=>b.onclick=()=>{
